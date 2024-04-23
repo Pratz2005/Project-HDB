@@ -1,0 +1,41 @@
+Original columns: month, town, flat_type, block, street_name, storey_range, area_sqm, flat_model, lease_start, resale_price
+
+month: Year and month in YYYY-MM format
+year: Year in YYYY format
+town: Town according to HDB planning areas (see under categorisation below for all of them). One town (Lim Chu Kang) only has transactions in the early 1990s while Punggol is a very new town without transactions in the early 1990s so you may encounter errors in some scenarios.
+town_dummy: dummy variable from 1-6 based on my categorisation of towns from most to least prime. These are subjective, not objective so if you disagree with my categorisation and/or want to use your own then go ahead!
+Categorisation:
+north=['SEMBAWANG','YISHUN','WOODLANDS'] --> 5
+northwest=['CHOA CHU KANG','BUKIT BATOK','BUKIT PANJANG','LIM CHU KANG'] --> 6
+northeast=['HOUGANG','SENGKANG','PUNGGOL'] --> 4
+primecentral=['BISHAN','BUKIT TIMAH', 'CENTRAL AREA'] --> 1
+geocentral=['ANG MO KIO','TOA PAYOH','SERANGOON'] --> 2
+westcentral=['CLEMENTI','QUEENSTOWN','BUKIT MERAH'] --> 2
+eastcentral=['KALLANG/WHAMPOA', 'MARINE PARADE','GEYLANG'] --> 3
+fareast=['BEDOK','PASIR RIS','TAMPINES'] --> 4
+farwest=['JURONG EAST', 'JURONG WEST'] --> 5
+flat_type: HDB-specified flat type ['4 ROOM' '3 ROOM' '1 ROOM' '5 ROOM' 'EXECUTIVE' '2 ROOM'
+'MULTI GENERATION']
+block: Block number (NOT flat number) of the HDB block
+street_name: Street name of the HDB block
+address: Identifying address formed by concatenating block+street_name+"SINGAPORE". No postal code unfortunately but I may try to add it in the future.
+latitude: Latitude coordinate of the HDB block, mostly between 1.27-1.46
+longitude: Longitude coordinate of the HDB block, mostly between 103.5-104.0
+storey_range: 3-number ranges (e.g. 1 TO 3, 19 TO 21) that contain the actual storey number (HDB doesn't reveal the exact floor)
+storey: Middle number in the storey range, useful as a numerical approximation that can be used for data visualisation/machine learning
+area_sqm: Size of the flat in square metres
+flat_model: HDB-specified flat model (not the same as flat type) ['New Generation', 'Improved', 'Standard', 'Model A', 'Apartment', 'Maisonette', 'Model A-Maisonette', 'Simplified', 'Terrace', 'Improved-Maisonette', 'MULTI GENERATION', 'Premium Apartment', 'Multi Generation', 'Adjoined flat', 'Premium Maisonette', '2-room', 'Model A2', 'DBSS', 'Type S1', 'Type S2', 'Premium Apartment Loft']
+lease_start: Year in which the 99-year lease commenced.
+lease_rem: The number of years of remaining lease, as calcualted from 2021-lease_start. For a few anomalies, the year of transaction is BEFORE the year of lease starting which is strange but could be due to house flipping before the Minimum Occupancy Period was introduced?
+resale_price: The agreed transaction price in nominal S$ of the house, excluding stamp duties and other agent fees
+price_psm: The price per square metre as calculated from resale_price/area_sqm
+price_psm_yearly: The "yearly" price per square metre as calculated from price_psm/lease_rem --> removed in Version 2
+Core CPI: The core CPI index value at the month of the transaction, based on the data by MAS
+price cpi_adj: The real, inflation-adjusted resale price of the flat, calculated using (resale_price/Core CPI)*100
+price_psm cpi_adj: The real, inflation-adjusted price per square metre of the flat, which is the best indicator of how expensive the flat is. Calculated using (price_psm/Core CPI)*100
+bala lease pct: The HDB's land value percentage of freehold land value, referencing Bala's Table. Important to consider because when the 99-year lease expires, the HDBs technically have 0 value. Adjusting for the lease remaining in the same way as inflation-adjusting, you can consider the price that is implied if the flat were to have a full 99-year lease.
+price lease_adj implied: The resale price implied if the flat were to have a full 99-year lease, calculated from (resale_price/bala lease pct)*96
+price_psm lease_adj implied: The price per square metre implied if the flat were to have a full 99-year lease, calculated from (price_psm/bala lease pct)*96
+price cpi_lease_adj implied: The inflation-adjusted resale price implied if the flat were to have a full 99-year lease, calculated from (price cpi_adj/bala lease pct)*96
+price_psm cpi_lease_adj implied: The inflation-adjusted price per square metre implied if the flat were to have a full 99-year lease, calculated from (price_psm cpi_adj/bala lease pct)*96
+year_gni: Singapore's GNI per capita (nominal S$) in the year of the transaction
