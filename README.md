@@ -1,4 +1,4 @@
-# SC1015_Miniproject - HDB DATASET
+Miniproject - HDB DATASET
 
 In this project, we delve into analyzing HDB (Housing Development Board) sales data in Singapore and explore machine learning techniques to aid in predicting future finances for Singaporeans. With the rising cost of living and housing prices in Singapore, understanding and managing expenses when purchasing HDBs has become increasingly important.
 
